@@ -12,6 +12,10 @@ export async function connectionDB () {
 
 export async function executeDB (sql: string, value?: Array<any>) {
   const getDb = await connectionDB()
-  const [rows] = await getDb.execute(sql, value)
+  
+  const bindSql = getDb.format(sql, value)
+  console.log('execute sql=', bindSql)
+  
+  const [rows] = await getDb.execute(bindSql)
   return rows
 }

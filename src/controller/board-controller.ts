@@ -5,13 +5,12 @@ import { encrypt } from "../utils/utils"
 export async function fetchBoardList (searchInfo: {searchText: string, limit: number, offset: number}) {
   console.log('fetchBoardList(), searchInfo=', searchInfo)
   const { searchText, offset, limit } = searchInfo
-  const valueArr: any[] = [offset, limit]
+  const valueArr: any[] = []
 
   let andSql = 'AND isDeleted = false '
   if (searchText) {
-    andSql += `AND writer LIKE '%?%' AND title LIKE '%?%'`
-    valueArr.unshift(searchText)
-    valueArr.unshift(searchText)
+    andSql += `AND (writer LIKE ? OR title LIKE ?)`
+    valueArr.push("%" + searchText + "%", "%" + searchText + "%")
   }
 
   const sql = `
@@ -20,6 +19,7 @@ export async function fetchBoardList (searchInfo: {searchText: string, limit: nu
    WHERE 1=1
     ${andSql}
    ORDER BY ID DESC
+   LIMIT ${offset}, ${limit}
   `
 
   console.log(sql);
@@ -34,9 +34,9 @@ export async function fetchBoard (boardId: number) {
   const sql = `
   SELECT id, writer, title, content, createAt, updateAt
     FROM wanted.board
-   WHERE id = ?
+   WHERE id = ${boardId}
   `
-  const [board]: any = await executeDB(sql, [boardId])
+  const [board]: any = await executeDB(sql)
   return board
 }
 
@@ -77,8 +77,7 @@ export async function updateBoard (boardId: number, boardInfo: {
   const sql = `
   UPDATE wanted.board
   SET ${setSql}
-  WHERE id = ?
+  WHERE id = ${boardId}
   `
-  valueArr.push(boardId)
   await executeDB(sql, valueArr)
 }
