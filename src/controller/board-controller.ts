@@ -22,9 +22,6 @@ export async function fetchBoardList (searchInfo: {searchText: string, limit: nu
    LIMIT ${offset}, ${limit}
   `
 
-  console.log(sql);
-  console.log(valueArr);
-  
   return executeDB(sql, valueArr)
 }
 
