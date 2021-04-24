@@ -8,6 +8,8 @@ import boardRoutes from './src/routes/board-routes'
 const app = express()
 const port = 3000
 
+app.use(express.json())
+
 app.use(testRoutes())
 app.use(boardRoutes())
 

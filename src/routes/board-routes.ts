@@ -11,7 +11,7 @@ export default function testRoutes (router = Router()) {
   router.get('/board/:id', getBoard)  // board 하나 조회
   router.post('/board', postBoard)  // board 등록
   router.put('/board/:id', confirmPassword, putBoard)  // board 수정
-  router.delete('/board/:id', confirmPassword, deleteBoard)  // board 삭제
+  router.put('/board/:id/delete', confirmPassword, deleteBoard)  // board 삭제
 
   async function getBoardList (req: any, res: any) {
     const searchInfo = validateInputData(req.query, {
@@ -37,7 +37,7 @@ export default function testRoutes (router = Router()) {
       title: Joi.string().required(),
       content: Joi.string().required(),
     })
-
+    
     await boardController.createBoard(boardInfo)
     
     res.send({result: 'OK'})
