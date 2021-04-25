@@ -14,11 +14,15 @@ export async function createComment (commentInfo: {
   boardId: number,
   writer: string,
   content: string,
+  upCommentId?: number
 }) {
   console.log('createComment(), commentInfo=', commentInfo)
-  const { boardId, writer, content } = commentInfo
+  const { boardId, writer, content, upCommentId } = commentInfo
   const sql = `
-  
+  INSERT INTO wanted.comment
+  (boardId, writer, content, upCommentId, createAt)
+  VALUES
+  (?, ?, ?, ?, NOW())
   `
-  await executeDB(sql, [boardId, writer, content])
+  await executeDB(sql, [boardId, writer, content, upCommentId])
 }

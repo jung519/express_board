@@ -25,7 +25,8 @@ export default function commentRoutes (router = Router()) {
     const { boardId } = validateInputData(req.params, { boardId: Joi.number().required() })
     const commentInfo = validateInputData(req.body, {
       writer: Joi.string().required(),
-      content: Joi.string().required() 
+      content: Joi.string().required(),
+      upCommentId: Joi.number().default(null)
     })
 
     await commentController.createComment({...commentInfo, boardId})
