@@ -8,9 +8,9 @@ import * as commentController from '../controller/comment-controller'
 export default function commentRoutes (router = Router()) {
 
   router.get('/comment/:boardId', asyncHandler(getCommentForBoardId))  // 해당 board에 comment 조회
-  router.post('/comment/:boardId', asyncHandler(postComment))  // comment 등록
+  router.post('/comment', asyncHandler(postComment))  // comment 등록
 
-  async function getCommentForBoardId (req: any, res: any) {
+  async function getCommentForBoardId (req, res) {
     const { boardId } = validateInputData(req.params, { boardId: Joi.number().required() })
     const {limit, offset} = validateInputData(req.query, {
       limit: Joi.number().required(),
@@ -21,15 +21,15 @@ export default function commentRoutes (router = Router()) {
     res.send(commentList)
   }
 
-  async function postComment (req: any, res: any) {
-    const { boardId } = validateInputData(req.params, { boardId: Joi.number().required() })
+  async function postComment (req, res) {
     const commentInfo = validateInputData(req.body, {
+      boardId: Joi.number().required(),
       writer: Joi.string().required(),
       content: Joi.string().required(),
       upCommentId: Joi.number().default(null)
     })
 
-    await commentController.createComment({...commentInfo, boardId})
+    await commentController.createComment(commentInfo)
     res.send({result: 'OK'})
   }
 

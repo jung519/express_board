@@ -3,11 +3,15 @@ import { executeDB } from "../db/db-setup"
 
 export async function fetchCommentListForBoard (boardId: number, limit: number, offset: number) {
   console.log('fetchCommentListForBoard(), boardId=', boardId, limit, offset)
+
   const sql = `
-  
+  SELECT id, upCommentId, writer, content, createAt, boardId
+    FROM wanted.comment
+   WHERE boardId = ${boardId}
+   ORDER BY IFNULL(upCommentId, id) ASC, id ASC
+   LIMIT ${offset}, ${limit}
   `
-  const commentList = await executeDB(sql, [])
-  return commentList
+  return executeDB(sql)
 }
 
 export async function createComment (commentInfo: {
