@@ -62,6 +62,8 @@ export default function testRoutes (router = Router()) {
 
   async function deleteBoard (req: any, res: any) {
     const {id: boardId} = validateInputData(req.params, { id: Joi.number().required() })   
+    validateInputData(req.body, { password: Joi.string().required() })
+  
 
     await boardController.updateBoard(boardId, { isDeleted: true })
 
