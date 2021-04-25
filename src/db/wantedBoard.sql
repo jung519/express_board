@@ -1,3 +1,6 @@
+-- database create sql
+CREATE DATABASE wanted;
+
 -- board table create sql
 CREATE TABLE board
 (
