@@ -5,7 +5,7 @@ export async function fetchCommentListForBoard (boardId: number, limit: number, 
   console.log('fetchCommentListForBoard(), boardId=', boardId, limit, offset)
 
   const sql = `
-  SELECT id, upCommentId, writer, content, creatdeAt, boardId
+  SELECT id, upCommentId, writer, content, createdAt, boardId
     FROM wanted.comment
    WHERE boardId = ${boardId}
    ORDER BY IFNULL(upCommentId, id) ASC, id ASC

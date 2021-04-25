@@ -7,8 +7,7 @@ export function validateInputData (inputObj: Object, schema: any) {
   const {value, error} = joiObj.validate(inputObj)
 
   if (error) {
-    console.warn('validation error=', error)
-    throw new CustomError('INVALID_INPUT', 'invalid input', 400)
+    throw new CustomError('INVALID_INPUT', error.message, 400)
   }
 
   return value
