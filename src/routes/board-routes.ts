@@ -17,8 +17,8 @@ export default function testRoutes (router = Router()) {
   async function getBoardList (req: any, res: any) {
     const searchInfo = validateInputData(req.query, {
       searchText: Joi.string().allow(null),
-      limit: Joi.number().required(),
-      offset: Joi.number().required()
+      limit: Joi.number().default(30),
+      offset: Joi.number().default(0)
     })
 
     const boardList = await boardController.fetchBoardList(searchInfo)

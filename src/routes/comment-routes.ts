@@ -13,8 +13,8 @@ export default function commentRoutes (router = Router()) {
   async function getCommentForBoardId (req, res) {
     const { boardId } = validateInputData(req.params, { boardId: Joi.number().required() })
     const {limit, offset} = validateInputData(req.query, {
-      limit: Joi.number().required(),
-      offset: Joi.number().required()
+      limit: Joi.number().default(30),
+      offset: Joi.number().default(0)
     })
 
     const commentList = await commentController.fetchCommentListForBoard(boardId, limit, offset)
