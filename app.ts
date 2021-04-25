@@ -2,8 +2,9 @@ import 'source-map-support/register'
 
 import express from 'express'
 import { connectionDB } from './src/db/db-setup'
-import boardRoutes from './src/routes/board-routes'
 import { errorHandler, notFoundErrorHandler } from './src/utils/errorHandler'
+import boardRoutes from './src/routes/board-routes'
+import commentRoutes from './src/routes/comment-routes'
 
 const PORT = 3000
 
@@ -15,6 +16,7 @@ async function server (app = express()) {
   app.use(express.json())
 
   app.use(boardRoutes())
+  app.use(commentRoutes())
 
   app.use(notFoundErrorHandler)
   app.use(errorHandler)
