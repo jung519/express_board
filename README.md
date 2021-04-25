@@ -41,7 +41,7 @@
   - request body
     + password: 비밀번호 (저장했던 글의 비밀번호 확인용)
 5. commnet list api
-* GET localhost:3000/comment/:boardId
+* GET localhost:3000/comment/:boardId?offset=0&limit=30
   - params
     + offset(optional, default: 0): page 단위
     + limit(optional, default: 30): page에 row수
