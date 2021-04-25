@@ -2,7 +2,6 @@ import 'source-map-support/register'
 
 import express from 'express'
 import { connectionDB } from './src/db/db-setup'
-import testRoutes from './src/routes/test-routes'
 import boardRoutes from './src/routes/board-routes'
 import { errorHandler, notFoundErrorHandler } from './src/utils/errorHandler'
 
@@ -15,7 +14,6 @@ async function server (app = express()) {
 
   app.use(express.json())
 
-  app.use(testRoutes())
   app.use(boardRoutes())
 
   app.use(notFoundErrorHandler)
