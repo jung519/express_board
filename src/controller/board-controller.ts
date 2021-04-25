@@ -9,12 +9,14 @@ export async function fetchBoardList (searchInfo: {searchText: string, limit: nu
 
   let andSql = 'AND isDeleted = false '
   if (searchText) {
-    andSql += `AND (writer LIKE ? OR title LIKE ?)`
-    valueArr.push("%" + searchText + "%", "%" + searchText + "%")
+    // andSql += `AND (writer LIKE ? OR title LIKE ?)`
+    // valueArr.push("%" + searchText + "%", "%" + searchText + "%")
+    andSql += `AND MATCH(writer,title) AGAINST(? IN BOOLEAN MODE) `
+    valueArr.push("*" + searchText + "*")
   }
 
   const sql = `
-  SELECT id, writer, title, content, createAt, updateAt
+  SELECT id, writer, title, content, createdAt, updatedAt
     FROM wanted.board
    WHERE 1=1
     ${andSql}
@@ -29,7 +31,7 @@ export async function fetchBoard (boardId: number) {
   console.log('fetchBoard(), boardId=', boardId)
 
   const sql = `
-  SELECT id, writer, title, content, createAt, updateAt
+  SELECT id, writer, title, content, createdAt, updatedAt
     FROM wanted.board
    WHERE id = ${boardId}
   `
@@ -48,7 +50,7 @@ export async function createBoard (boardInfo: {
   
   const sql = `
   INSERT INTO wanted.board 
-  (writer, password, title, content, createAt, updateAt)
+  (writer, password, title, content, createdAt, updatedAt)
   VALUES
   (?, ?, ?, ?, NOW(), NOW())
   `
@@ -62,10 +64,9 @@ export async function updateBoard (boardId: number, boardInfo: {
   isDeleted?: boolean,
 }) {
   console.log('updateBoard(), boardId=', boardId, boardInfo)
-  // const { writer, title, content, isDeleted } = boardInfo
 
   const valueArr: any[] = []
-  let setSql = 'updateAt = NOW() '
+  let setSql = 'updatedAt = NOW() '
   _.forOwn(boardInfo, (value, key) => {
     valueArr.push(value)
     setSql += `, ${key} = ?`

@@ -67,5 +67,6 @@ export default function testRoutes (router = Router()) {
 
     res.send({result: 'OK'})
   }
-return router
+
+  return router
 }

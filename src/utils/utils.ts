@@ -1,13 +1,14 @@
 import Joi from 'joi'
 import * as bcrypt from 'bcryptjs'
+import { CustomError } from './errorHandler'
 
-export function validateInputData (obj: Object, schema) {
+export function validateInputData (inputObj: Object, schema: any) {
   const joiObj = Joi.object(schema)
-  const {value, error} = joiObj.validate(obj)
+  const {value, error} = joiObj.validate(inputObj)
 
   if (error) {
     console.warn('validation error=', error)
-    throw new Error(error.message)
+    throw new CustomError('INVALID_INPUT', 'invalid input', 400)
   }
 
   return value
