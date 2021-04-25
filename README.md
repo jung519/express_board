@@ -4,6 +4,7 @@
 * node, express
 * typescript
 * mysql
+* 모두 최신 버전
 
 ### db table create sql
 * /src/db/wantedBoard.sql
