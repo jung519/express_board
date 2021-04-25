@@ -9,8 +9,6 @@ export async function fetchBoardList (searchInfo: {searchText: string, limit: nu
 
   let andSql = 'AND isDeleted = false '
   if (searchText) {
-    // andSql += `AND (writer LIKE ? OR title LIKE ?)`
-    // valueArr.push("%" + searchText + "%", "%" + searchText + "%")
     andSql += `AND MATCH(writer,title) AGAINST(? IN BOOLEAN MODE) `
     valueArr.push("*" + searchText + "*")
   }
