@@ -1,4 +1,5 @@
 import { executeDB } from "../db/db-setup";
+import { CustomError } from "../utils/errorHandler";
 import { validatePassword } from "../utils/utils";
 
 
@@ -10,7 +11,7 @@ export default async function confirmPassword (req: any, res: any, next: any) {
   const [{password}]:any = await executeDB(sql, [boardId])
   
   if (!validatePassword(inputPassword, password)) {
-    throw new Error('password invalid!')
+    throw new CustomError('INVALID_PASSWORD', 'password invalid!', 401)
   }
   
   next();

@@ -1,7 +1,7 @@
 import Joi from 'joi'
 import * as bcrypt from 'bcryptjs'
 
-export function validateInputData (obj: Object, schema: any) {
+export function validateInputData (obj: Object, schema) {
   const joiObj = Joi.object(schema)
   const {value, error} = joiObj.validate(obj)
 
@@ -19,6 +19,6 @@ export function encrypt (password: string) {
   return bcrypt.hashSync(password, salt)
 }
 
-export const validatePassword = (password: string, hashed: string) => {
+export function validatePassword (password: string, hashed: string) {
   return bcrypt.compareSync(password, hashed)
 }

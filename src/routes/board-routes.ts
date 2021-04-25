@@ -1,17 +1,18 @@
 import { Router } from 'express'
 import Joi from 'joi'
 import _ from 'lodash'
+import asyncHandler from 'express-async-handler'
 import * as boardController from '../controller/board-controller'
 import confirmPassword from '../middleware/confirmPassword'
 import { validateInputData } from '../utils/utils'
 
 export default function testRoutes (router = Router()) {
 
-  router.get('/boardList', getBoardList)  // board list 조회
-  router.get('/board/:id', getBoard)  // board 하나 조회
-  router.post('/board', postBoard)  // board 등록
-  router.put('/board/:id', confirmPassword, putBoard)  // board 수정
-  router.put('/board/:id/delete', confirmPassword, deleteBoard)  // board 삭제
+  router.get('/boardList', asyncHandler(getBoardList))  // board list 조회
+  router.get('/board/:id', asyncHandler(getBoard))  // board 하나 조회
+  router.post('/board', asyncHandler(postBoard))  // board 등록
+  router.put('/board/:id', asyncHandler(confirmPassword), asyncHandler(putBoard))  // board 수정
+  router.put('/board/:id/delete', asyncHandler(confirmPassword), asyncHandler(deleteBoard))  // board 삭제
 
   async function getBoardList (req: any, res: any) {
     const searchInfo = validateInputData(req.query, {
