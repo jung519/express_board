@@ -10,7 +10,7 @@ export async function connectionDB () {
     user     : 'root',
     password : 'wjdgus123',
     port: 3306,
-    database : 'wanted'
+    database : 'express_board'
   })
   return connection
 }

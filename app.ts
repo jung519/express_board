@@ -30,7 +30,7 @@ async function server (app = express()) {
         console.log('connection error. ', err)
       })
   })
-  console.log(`wanted board app listening at http://localhost:${PORT}`)
+  console.log(`express_board board app listening at http://localhost:${PORT}`)
 }
 
 server()

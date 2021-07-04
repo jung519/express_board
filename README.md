@@ -1,13 +1,10 @@
-# wantedBoard
+# express_board
 
 ### spec
 * node, express
 * typescript
 * mysql
 * 모두 최신 버전
-
-### db table create sql
-* /src/db/wantedBoard.sql
 
 ### server start
 1. npm i
