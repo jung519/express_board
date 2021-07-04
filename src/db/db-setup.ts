@@ -1,4 +1,5 @@
 import * as mysql from 'mysql2/promise'
+import { Sequelize } from "sequelize"
 
 
 let connection: mysql.Connection
@@ -23,3 +24,13 @@ export async function executeDB (sql: string, value?: Array<any>) {
   const [rows] = await getDb.execute(bindSql)
   return rows
 }
+
+export const sequelize = new Sequelize(
+  'board',
+  'root',
+  'wjdgus123',
+  {
+      host: 'localhost',
+      dialect: 'mysql'
+  }
+)

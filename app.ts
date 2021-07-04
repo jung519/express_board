@@ -1,7 +1,7 @@
 import 'source-map-support/register'
 
 import express from 'express'
-import { connectionDB } from './src/db/db-setup'
+import { connectionDB, sequelize } from './src/db/db-setup'
 import { errorHandler, notFoundErrorHandler } from './src/utils/errorHandler'
 import boardRoutes from './src/routes/board-routes'
 import commentRoutes from './src/routes/comment-routes'
@@ -21,7 +21,15 @@ async function server (app = express()) {
   app.use(notFoundErrorHandler)
   app.use(errorHandler)
   
-  app.listen(PORT)
+  app.listen(PORT, () => {
+    sequelize.authenticate()
+      .then(() => {
+        console.log('connection success')
+      })
+      .catch(err => {
+        console.log('connection error. ', err)
+      })
+  })
   console.log(`wanted board app listening at http://localhost:${PORT}`)
 }
 

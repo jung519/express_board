@@ -15,13 +15,12 @@ export default function testRoutes (router = Router()) {
   router.put('/board/:id/delete', asyncHandler(confirmPassword), asyncHandler(deleteBoard))  // board 삭제
 
   async function getBoardList (req: any, res: any) {
-    const searchInfo = validateInputData(req.query, {
-      searchText: Joi.string().allow(null),
+    const { limit, offset } = validateInputData(req.query, {
       limit: Joi.number().default(30),
       offset: Joi.number().default(0)
     })
 
-    const boardList = await boardController.fetchBoardList(searchInfo)
+    const boardList = await boardController.fetchBoardList(limit, offset)
     res.send(boardList)
   }
 
@@ -65,7 +64,7 @@ export default function testRoutes (router = Router()) {
     validateInputData(req.body, { password: Joi.string().required() })
   
 
-    await boardController.updateBoard(boardId, { isDeleted: true })
+    await boardController.updateBoard(boardId, { isDelete: true })
 
     res.send({result: 'OK'})
   }

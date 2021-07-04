@@ -19,6 +19,7 @@
     "joi": "^17.4.0",
     "lodash": "^4.17.21",
     "mysql2": "^2.2.5",
+    "sequelize": "^6.6.4",
     "tsc-watch": "^4.2.9",
     "typescript": "^4.2.4"
   },

@@ -1,79 +1,43 @@
-import _ from "lodash"
-import { executeDB } from "../db/db-setup"
+import { Board, BoardAttributes } from "../db/model/board"
+import { Comment } from "../db/model/comment"
 import { encrypt } from "../utils/utils"
 
-export async function fetchBoardList (searchInfo: {searchText: string, limit: number, offset: number}) {
-  console.log('fetchBoardList(), searchInfo=', searchInfo)
-  const { searchText, offset, limit } = searchInfo
-  const valueArr: any[] = []
+export async function fetchBoardList (limit: number, offset: number) {
+  console.log('fetchBoardList(), limit=', limit, offset)
 
-  let andSql = 'AND isDeleted = false '
-  if (searchText) {
-    andSql += `AND MATCH(writer,title) AGAINST(? IN BOOLEAN MODE) `
-    valueArr.push("*" + searchText + "*")
-  }
-
-  const sql = `
-  SELECT id, writer, title, content, createdAt, updatedAt
-    FROM wanted.board
-   WHERE 1=1
-    ${andSql}
-   ORDER BY ID DESC
-   LIMIT ${offset}, ${limit}
-  `
-
-  return executeDB(sql, valueArr)
+  return Board.findAll({
+    where: { isDelete: false },
+    limit,
+    offset
+  })
 }
 
 export async function fetchBoard (boardId: number) {
   console.log('fetchBoard(), boardId=', boardId)
 
-  const sql = `
-  SELECT id, writer, title, content, createdAt, updatedAt
-    FROM wanted.board
-   WHERE id = ${boardId}
-  `
-  const [board]: any = await executeDB(sql)
-  return board
+  return Board.findOne({
+    where: { id: boardId },
+    include: { 
+      model: Comment,
+      order: [['id', 'desc']]
+    }
+  })
 }
 
-export async function createBoard (boardInfo: {
-  writer: string,
-  password: string,
-  title: string,
-  content: string,
-}) {
+export async function createBoard (boardInfo: BoardAttributes) {
   console.log('createBoard(), boardInfo=', boardInfo)
-  const { writer, password, title, content } = boardInfo 
-  
-  const sql = `
-  INSERT INTO wanted.board 
-  (writer, password, title, content, createdAt, updatedAt)
-  VALUES
-  (?, ?, ?, ?, NOW(), NOW())
-  `
-  await executeDB(sql, [writer, encrypt(password), title, content])
+  const { password, ...board } = boardInfo 
+
+  await Board.create({...board, password: encrypt(password) })
 }
 
 export async function updateBoard (boardId: number, boardInfo: {
   writer?: string,
   title?: string,
   content?: string,
-  isDeleted?: boolean,
+  isDelete?: boolean,
 }) {
   console.log('updateBoard(), boardId=', boardId, boardInfo)
 
-  const valueArr: any[] = []
-  let setSql = 'updatedAt = NOW() '
-  _.forOwn(boardInfo, (value, key) => {
-    valueArr.push(value)
-    setSql += `, ${key} = ?`
-  })
-
-  const sql = `
-  UPDATE wanted.board
-  SET ${setSql}
-  WHERE id = ${boardId}
-  `
-  await executeDB(sql, valueArr)
+  await Board.update(boardInfo, {where: { id: boardId }})
 }
