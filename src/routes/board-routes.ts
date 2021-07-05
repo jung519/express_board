@@ -6,13 +6,12 @@ import * as boardController from '../controller/board-controller'
 import confirmPassword from '../middleware/confirmPassword'
 import { validateInputData } from '../utils/utils'
 
-export default function testRoutes (router = Router()) {
+export default function boardRoutes (router = Router()) {
 
-  router.get('/boardList', asyncHandler(getBoardList))  // board list 조회
+  router.get('/board/list', asyncHandler(getBoardList))  // board list 조회
   router.get('/board/:id', asyncHandler(getBoard))  // board 하나 조회
   router.post('/board', asyncHandler(postBoard))  // board 등록
   router.put('/board/:id', asyncHandler(confirmPassword), asyncHandler(putBoard))  // board 수정
-  router.put('/board/:id/delete', asyncHandler(confirmPassword), asyncHandler(deleteBoard))  // board 삭제
 
   async function getBoardList (req: any, res: any) {
     const { limit, offset } = validateInputData(req.query, {
@@ -55,16 +54,6 @@ export default function testRoutes (router = Router()) {
      
     _.remove(boardInfo, 'password')
     await boardController.updateBoard(boardId, boardInfo)
-
-    res.send({result: 'OK'})
-  }
-
-  async function deleteBoard (req: any, res: any) {
-    const {id: boardId} = validateInputData(req.params, { id: Joi.number().required() })   
-    validateInputData(req.body, { password: Joi.string().required() })
-  
-
-    await boardController.updateBoard(boardId, { isDelete: true })
 
     res.send({result: 'OK'})
   }

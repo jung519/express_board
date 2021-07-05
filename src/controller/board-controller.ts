@@ -17,10 +17,8 @@ export async function fetchBoard (boardId: number) {
 
   return Board.findOne({
     where: { id: boardId },
-    include: { 
-      model: Comment,
-      order: [['id', 'desc']]
-    }
+    include: { model: Comment },
+    order: [[Comment, 'id', 'DESC']]
   })
 }
 
@@ -31,12 +29,7 @@ export async function createBoard (boardInfo: BoardAttributes) {
   await Board.create({...board, password: encrypt(password) })
 }
 
-export async function updateBoard (boardId: number, boardInfo: {
-  writer?: string,
-  title?: string,
-  content?: string,
-  isDelete?: boolean,
-}) {
+export async function updateBoard (boardId: number, boardInfo: BoardAttributes){
   console.log('updateBoard(), boardId=', boardId, boardInfo)
 
   await Board.update(boardInfo, {where: { id: boardId }})

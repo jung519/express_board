@@ -1,36 +1,9 @@
 import * as mysql from 'mysql2/promise'
 import { Sequelize } from "sequelize"
 
-
-let connection: mysql.Connection
-
-export async function connectionDB () {
-  connection = await mysql.createConnection({
-    host     : 'localhost',
-    user     : 'root',
-    password : 'wjdgus123',
-    port: 3306,
-    database : 'express_board'
-  })
-  return connection
-}
-
-export async function executeDB (sql: string, value?: Array<any>) {
-  const getDb = await connection
-  
-  const bindSql = getDb.format(sql, value)
-  console.log('execute sql=', bindSql)
-  
-  const [rows] = await getDb.execute(bindSql)
-  return rows
-}
-
 export const sequelize = new Sequelize(
-  'board',
-  'root',
-  'wjdgus123',
-  {
-      host: 'localhost',
-      dialect: 'mysql'
-  }
+  'board', // db
+  'root', // user
+  'QmQ6syrpw8qw9JWnP3ynZ7RXZhurq4',  // password
+  { host: 'localhost', dialect: 'mysql' }
 )

@@ -1,4 +1,3 @@
-import { executeDB } from "../db/db-setup";
 import { Board } from "../db/model/board";
 import { CustomError } from "../utils/errorHandler";
 import { validatePassword } from "../utils/utils";
